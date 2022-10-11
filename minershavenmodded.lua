@@ -387,7 +387,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     if shouldboost then
         if oredebounce == false then
             oredebounce = true
-            --spawn(function()
+            spawn(function()
                 --actually boosting :)
                 child.Anchored = true
                 -- for _,v in pairs(itemstoload) do
@@ -429,8 +429,8 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                     child.Anchored = false
                 end
                 oredebounce = false
-            --end)
-            --oredebounce = false
+            end)
+            oredebounce = false
         end
 
 
@@ -440,7 +440,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     elseif shouldboostout then
         if oredebounce == false then
             oredebounce = true
-            --spawn(function()
+            spawn(function()
                 child.Anchored = true
                 local furnace
                 for _, v in pairs(mytycoon:GetChildren()) do
@@ -485,8 +485,8 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                     child.Anchored = false
                 end
                 oredebounce = false
-            --end)
-            --oredebounce = false
+            end)
+            oredebounce = false
         end
     end
 end)
