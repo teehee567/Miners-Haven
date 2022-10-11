@@ -387,7 +387,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     if shouldboost then
         if not oredebounce then
             oredebounce = true
-                spawn(function()
+            spawn(function()
                 --actually boosting :)
                 child.Anchored = true
                 -- for _,v in pairs(itemstoload) do
