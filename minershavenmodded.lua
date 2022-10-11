@@ -24,6 +24,7 @@ local shouldboost = false
 local shouldboostout = false
 local itemtocraft = ""
 local amounttocraft = 1
+local oredebounce = false
 
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
@@ -166,10 +167,12 @@ game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
                 after = tonumber(after)
                 if after >= tonumber(moneytorebirth) then
                     game.ReplicatedStorage.Reb_irth:InvokeServer()
+                    oredebounce = false
                 end
             end
         else
             game.ReplicatedStorage.Reb_irth:InvokeServer()
+            oredebounce = false
         end
     end
 end)
@@ -287,6 +290,7 @@ Section1c:AddToggle({
             grabteslas()
             --print(table.concat(teslatable,", "))
             grabitems()
+            oredebounce = false
         end
     end
 })
@@ -303,6 +307,7 @@ Section1c:AddToggle({
             graboutteslas()
             --print(table.concat(teslatable,", "))
             graboutitems()
+            oredebounce = false
         end
     end
 })
@@ -382,7 +387,7 @@ end
 
 
 
-local oredebounce = false
+
 game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     if shouldboost then
         if oredebounce == false then
