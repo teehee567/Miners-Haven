@@ -385,7 +385,7 @@ end
 local oredebounce = false
 game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     if shouldboost then
-        if not oredebounce then
+        if oredebounce == false then
             oredebounce = true
             --spawn(function()
                 --actually boosting :)
@@ -438,7 +438,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
 
         --this is poop and just open boxes yourself and use exotics its more than enough
     elseif shouldboostout then
-        if not oredebounce then
+        if oredebounce == false then
             oredebounce = true
             --spawn(function()
                 child.Anchored = true
