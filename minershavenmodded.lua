@@ -549,9 +549,11 @@ mytycoon.ChildAdded:Connect(function(item)
     if conveyormulti ~= 1 then
         wait(0.1)
         if item.ClassName == "Model" then
-            local conveyor = item.Model.Conv
-            local conveyorspeed = tostring(item.Model.Conv.ConveyorSpeed.Value)
-            conveyor.Velocity = conveyor.CFrame.lookVector*(conveyormulti*conveyorspeed)
+            if item.Model:FindFirstChild("Conv") then
+                local conveyor = item.Model.Conv
+                local conveyorspeed = tostring(item.Model.Conv.ConveyorSpeed.Value)
+                conveyor.Velocity = conveyor.CFrame.lookVector*(conveyormulti*conveyorspeed)
+            end
         end
     end
 end)
