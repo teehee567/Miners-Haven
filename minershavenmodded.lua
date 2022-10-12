@@ -13,8 +13,8 @@ end
 
 
 
-
-
+local shouldchangeconvspeed = false
+local conveyormulti = 1
 local autorebirth = false
 local loadlayouts = false
 local loadlayouts1 = false
@@ -24,7 +24,6 @@ local shouldboost = false
 local shouldboostout = false
 local itemtocraft = ""
 local amounttocraft = 1
-local oredebounce = false
 
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
@@ -51,6 +50,14 @@ local Tab4 = Window:MakeTab({
 	Name = "Shops",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
+})
+local Tab5 = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local Section1e = Tab5:AddSection({
+	Name = "Misc"
 })
 
 local Section1a = Tab1:AddSection({
@@ -155,6 +162,7 @@ for _, tycoon in ipairs(game.Workspace.Tycoons:GetChildren()) do
     break
     end
 end
+
 game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
     if autorebirth then
         if pcall(testnumber) then
@@ -167,12 +175,10 @@ game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
                 after = tonumber(after)
                 if after >= tonumber(moneytorebirth) then
                     game.ReplicatedStorage.Reb_irth:InvokeServer()
-                    oredebounce = false
                 end
             end
         else
             game.ReplicatedStorage.Reb_irth:InvokeServer()
-            oredebounce = false
         end
     end
 end)
@@ -290,7 +296,6 @@ Section1c:AddToggle({
             grabteslas()
             --print(table.concat(teslatable,", "))
             grabitems()
-            oredebounce = false
         end
     end
 })
@@ -307,7 +312,6 @@ Section1c:AddToggle({
             graboutteslas()
             --print(table.concat(teslatable,", "))
             graboutitems()
-            oredebounce = false
         end
     end
 })
@@ -387,12 +391,12 @@ end
 
 
 
-
+local oredebounce = false
 game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     if shouldboost then
-        if oredebounce == false then
+        if not oredebounce then
             oredebounce = true
-            --spawn(function()
+            spawn(function()
                 --actually boosting :)
                 child.Anchored = true
                 -- for _,v in pairs(itemstoload) do
@@ -411,9 +415,10 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                 if shouldboost then
                     for _,tesla in pairs(teslatable) do
                         for _,upgrader in pairs(itemstoload) do
-                                mytycoon:WaitForChild(upgrader)
-                                mytycoon[upgrader].Model:WaitForChild("Upgrade")
                                 spawn(function()
+                                    mytycoon:WaitForChild(upgrader)
+                                    mytycoon[upgrader].Model:WaitForChild("Upgrade")
+                                
                                     firetouchinterest(child,mytycoon[upgrader].Model.Upgrade,0)
                                     wait()
                                     firetouchinterest(child,mytycoon[upgrader].Model.Upgrade,1)
@@ -434,8 +439,8 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                     child.Anchored = false
                 end
                 oredebounce = false
-            --end)
-            --oredebounce = false
+            end)
+            oredebounce = false
         end
 
 
@@ -443,9 +448,9 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
 
         --this is poop and just open boxes yourself and use exotics its more than enough
     elseif shouldboostout then
-        if oredebounce == false then
+        if not oredebounce then
             oredebounce = true
-            --spawn(function()
+            spawn(function()
                 child.Anchored = true
                 local furnace
                 for _, v in pairs(mytycoon:GetChildren()) do
@@ -490,8 +495,63 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                     child.Anchored = false
                 end
                 oredebounce = false
-            --end)
-            --oredebounce = false
+            end)
+            oredebounce = false
+        end
+    end
+end)
+
+
+
+function testnumber2(x) -- because i can tbe bothered to change the otehr one
+    x = 20/x
+end
+
+
+Section1e:AddTextbox({
+	Name = "Conveyor Speed Multiplier",
+	Default = 1,
+	TextDisappear = false,
+	Callback = function(Value)
+        if pcall(testnumber2,Value) then
+            shouldchangeconvspeed = true
+            conveyormulti = Value
+            conveyorspeedboost()
+        else
+            OrionLib:MakeNotification({
+                Name = "Seek Help",
+                Content = "A multiplier is a number",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+	end
+})
+
+
+function conveyorspeedboost()
+    if shouldchangeconvspeed then
+        for _,item in pairs(mytycoon:GetChildren()) do
+            if item.ClassName == "Model" then
+                if item.Model:FindFirstChild("Conv") then
+                    local conveyor = item.Model.Conv
+                    local conveyorspeed = tostring(item.Model.Conv.ConveyorSpeed.Value)
+                    conveyor.Velocity = conveyor.CFrame.lookVector*(conveyormulti*conveyorspeed)
+                end
+            end
+        end
+    end
+end
+
+
+
+mytycoon.ChildAdded:Connect(function(item)
+    if conveyormulti ~= 1 then
+        wait(0.1)
+        if item.ClassName == "Model" then
+            local conveyor = item.Model.Conv
+            local conveyorspeed = tostring(item.Model.Conv.ConveyorSpeed.Value)
+            conveyor.Velocity = conveyor.CFrame.lookVector*(conveyormulti*conveyorspeed)
         end
     end
 end)
@@ -501,7 +561,6 @@ end)
 
 
 local debounce = false
-
 game.Players.LocalPlayer.Rebirths.Changed:Connect(function()
     if not debounce then
         debounce = true
