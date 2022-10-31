@@ -41,11 +41,6 @@ local Tab2 = Window:MakeTab({
 	PremiumOnly = false
 })
 
-local Tab3 = Window:MakeTab({
-	Name = "Ore Booster",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
 local Tab4 = Window:MakeTab({
 	Name = "Shops",
 	Icon = "rbxassetid://4483345998",
@@ -67,10 +62,6 @@ local Section1a = Tab1:AddSection({
 
 local Section1b = Tab2:AddSection({
 	Name = "Auto Craft"
-})
-
-local Section1c = Tab3:AddSection({
-	Name = "Ore Booster"
 })
 
 
@@ -282,39 +273,6 @@ end
 
 
 
-
-Section1c:AddParagraph("How to","Place layout and then turn on the booster, it will auto grab the teslas and should be fine. If it doesnt work turn it off and on\n\nFor those who are completely clueless, place down as many upgraders as you want then a single mine and a single furnace.")
-
-local itemstoload = {}
-Section1c:AddToggle({
-	Name = "Boost to the Moon",
-	Default = false,
-	Callback = function(Value)
-		shouldboost = Value
-        if shouldboost then
-            grabminefurnace()
-            grabteslas()
-            --print(table.concat(teslatable,", "))
-            grabitems()
-        end
-    end
-})
-
-
-Section1c:AddParagraph("ONLY 1 BOOSTER CAN BE USED AT A TIME","THIS IS SHIT, If you're wondering yes this also uses your own upgraders\nWill probably get patched soon since its literally 2 lines to patch")
-Section1c:AddToggle({
-	Name = "Boost with Other peoples items",
-	Default = false,
-	Callback = function(Value)
-		shouldboostout = Value
-        if shouldboostout then
-            grabminefurnace()
-            graboutteslas()
-            --print(table.concat(teslatable,", "))
-            graboutitems()
-        end
-    end
-})
 
 function grabitems()
     table.clear(itemstoload)
