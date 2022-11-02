@@ -1,0 +1,688 @@
+
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+isloaded = false
+while not isloaded do
+    if game.Players.LocalPlayer:FindFirstChild("Rebirths") then
+        isloaded = true
+    end
+    wait(0.1)
+end
+
+
+
+local shouldchangeconvspeed = false
+local conveyormulti = 1
+local autorebirth = false
+local loadlayouts = false
+local loadlayouts1 = false
+local moneytorebirth = "no"
+local after
+local shouldboost = false
+local shouldboostout = false
+local itemtocraft = ""
+local amounttocraft = 1
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "5min edit|Lcopium#1131", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+local Tab1 = Window:MakeTab({
+	Name = "Miners Haven",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tab2 = Window:MakeTab({
+	Name = "Auto crafter",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tab3 = Window:MakeTab({
+	Name = "Ore Booster",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local Tab4 = Window:MakeTab({
+	Name = "Shops",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local Tab5 = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+local Section1e = Tab5:AddSection({
+	Name = "Misc"
+})
+
+local Section1a = Tab1:AddSection({
+	Name = "Auto"
+})
+
+
+local Section1b = Tab2:AddSection({
+	Name = "Auto Craft"
+})
+
+local Section1c = Tab3:AddSection({
+	Name = "Ore Booster"
+})
+
+
+Section1b:AddTextbox({
+	Name = "Item to craft",
+	Default = "Case sensitive",
+	TextDisappear = false,
+	Callback = function(Value)
+		itemtocraft = Value
+	end
+})
+
+Section1b:AddTextbox({
+	Name = "Amount to craft",
+	Default = "1",
+	TextDisappear = false,
+	Callback = function(Value)
+		amounttocraft = Value
+	end
+})
+
+Section1b:AddButton({
+	Name = "Check if you can craft (Will Lag)(LIKE REALLY HARD)",
+	Callback = function()
+        autochecker(itemtocraft,tonumber(amounttocraft))
+  	end
+})
+
+Section1b:AddButton({
+	Name = "Craft",
+	Callback = function()
+        autocrafter(itemtocraft,tonumber(amounttocraft))
+  	end
+})
+
+
+local Section1d = Tab4:AddSection({
+	Name = "GUI"
+})
+
+
+Section1d:AddButton({
+	Name = "Show Craftsman",
+	Callback = function()
+        game.Players.LocalPlayer.PlayerGui.GUI.Craftsman.Visible = true
+  	end
+})
+
+
+Section1d:AddButton({
+	Name = "Masked Man",
+	Callback = function()
+        game.Players.LocalPlayer.PlayerGui.GUI.TheWanderer.Visible = true
+  	end
+})
+
+Section1d:AddButton({
+	Name = "Craftsman 2",
+	Callback = function()
+        game.Players.LocalPlayer.PlayerGui.GUI.Craftsman2.Visible = true
+  	end
+})
+
+Section1a:AddTextbox({
+	Name = "Money to rebirth",
+	Default = "onlyscientific, put the exponent",
+	TextDisappear = false,
+	Callback = function(Value)
+		moneytorebirth = Value
+        --print(moneytorebirth)
+        OrionLib:MakeNotification({
+            Name = "Money to Rebirth",
+            Content = "Minimum money to rebirth is: ".."1e"..moneytorebirth,
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+	end
+})
+
+function testnumber()
+    local x
+    x = tonumber(moneytorebirth)/40
+end
+
+local mytycoon
+for _, tycoon in ipairs(game.Workspace.Tycoons:GetChildren()) do
+    if tostring(tycoon.Owner.Value) == tostring(game.Players.LocalPlayer) then
+        mytycoon = tycoon
+    break
+    end
+end
+
+game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
+    if autorebirth then
+        if pcall(testnumber) then
+            local ttd = game.Players.LocalPlayer.PlayerGui.GUI.HUDTop.Money.Value.text
+            local _, chars = ttd:gsub("e","")
+            if chars == 1 then
+                local p="(.+)e(.+)"
+                local before
+                before,after=ttd:match(p)
+                after = tonumber(after)
+                if after >= tonumber(moneytorebirth) then
+                    game.ReplicatedStorage.Rebirth:InvokeServer()
+                end
+            end
+        else
+            game.ReplicatedStorage.Rebirth:InvokeServer()
+        end
+    end
+end)
+
+
+
+
+Section1a:AddToggle({
+	Name = "Auto Rebirth",
+	Default = false,
+	Callback = function(Value)
+		autorebirth = Value
+        if Value then
+            game.ReplicatedStorage.Reb_irth:InvokeServer()
+        end
+	end
+})
+
+
+
+
+
+
+
+Section1a:AddToggle({
+	Name = "Auto Layout 1",
+	Default = false,
+	Callback = function(Value)
+		loadlayouts = Value
+        if loadlayouts then
+            wait(0.75)
+            game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout1")
+        end
+    end
+})
+
+Section1a:AddToggle({
+	Name = "Auto Layout 2",
+	Default = false,
+	Callback = function(Value)
+		loadlayouts1 = Value
+        if loadlayouts1 then
+            wait(0.75)
+            game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout2")
+        end
+    end
+})
+
+
+
+
+
+
+local teslatable = {}
+
+local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All"}
+-- if you're looking throuhg the code because they're more teslas, just add to this table^
+
+function grabteslas()
+    table.clear(teslatable)
+
+    for _,v in pairs(game.Workspace.Tycoons[mytycoon.name]:GetChildren()) do
+        if v.ClassName == "Model" then
+            if table.find(baseteslas,v.Name) then
+                table.insert(teslatable,v.Name)
+            end
+        end
+    end
+    OrionLib:MakeNotification({
+        Name = "Teslas:",
+        Content = table.concat(teslatable,"\n"),
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+    table.insert(teslatable,"go ahead do it again") -- this is required becasue after the last tesla runs it has to go through the upgraders again
+    print(table.concat(teslatable,", "))
+end
+
+
+
+local furnacename
+local mine
+function grabminefurnace()
+    for _, v in pairs(mytycoon:GetChildren()) do
+        if v.ClassName == "Model" then
+            if v.Model:FindFirstChild("Lava") then
+                furnacename = v.Name
+            elseif v.Model:FindFirstChild("DropperScript") then
+                mine = v.Name
+            end
+        end
+    end
+    OrionLib:MakeNotification({
+        Name = "Mine/Furnace:",
+        Content = "Mine is: "..mine.."\n".."Furnace is: "..furnacename,
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+end
+
+
+
+
+
+Section1c:AddParagraph("How to","Place layout and then turn on the booster, it will auto grab the teslas and should be fine. If it doesnt work turn it off and on\n\nFor those who are completely clueless, place down as many upgraders as you want then a single mine and a single furnace.")
+
+local itemstoload = {}
+Section1c:AddToggle({
+	Name = "Boost to the Moon",
+	Default = false,
+	Callback = function(Value)
+		shouldboost = Value
+        if shouldboost then
+            grabminefurnace()
+            grabteslas()
+            --print(table.concat(teslatable,", "))
+            grabitems()
+        end
+    end
+})
+
+
+Section1c:AddParagraph("ONLY 1 BOOSTER CAN BE USED AT A TIME","THIS IS SHIT, If you're wondering yes this also uses your own upgraders\nWill probably get patched soon since its literally 2 lines to patch")
+Section1c:AddToggle({
+	Name = "Boost with Other peoples items",
+	Default = false,
+	Callback = function(Value)
+		shouldboostout = Value
+        if shouldboostout then
+            grabminefurnace()
+            graboutteslas()
+            --print(table.concat(teslatable,", "))
+            graboutitems()
+        end
+    end
+})
+
+function grabitems()
+    table.clear(itemstoload)
+    for _,v in pairs(mytycoon:GetChildren()) do
+        if v.ClassName == "Model" then
+            if v.Model:FindFirstChild("Upgrade") then
+                if not table.find(teslatable,v.Name) then
+                    table.insert(itemstoload,v.Name)
+                end
+            end
+        end
+    end
+    print(table.concat(itemstoload,", "))
+    OrionLib:MakeNotification({
+        Name = "Items:",
+        Content = table.concat(itemstoload,"\n"),
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+end
+
+
+local teslatableout = {}
+function graboutteslas()
+    table.clear(teslatableout)
+    for _,tycoons in pairs(game.Workspace.Tycoons:GetChildren()) do
+        for _,v in pairs(game.Workspace.Tycoons[tycoons.Name]:GetChildren()) do
+            if v.ClassName == "Model" then
+                if table.find(baseteslas,v.Name) then
+                    if not table.find(teslatableout, v.Name) then
+                        table.insert(teslatableout,v.Name)
+                    end
+                end
+            end
+        end
+    end
+    OrionLib:MakeNotification({
+        Name = "Teslas:",
+        Content = table.concat(teslatableout,"\n"),
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+    table.insert(teslatableout,"go ahead do it again") -- this is required becasue after the last tesla runs it has to go through the upgraders again
+    print(table.concat(teslatableout,", "))
+end
+
+
+local upgradersthatblowupores = {"Dragon Blaster", "Hydra Blaster", "Master Spark Blaster"}
+
+local itemstoloadout = {}
+function graboutitems()
+    table.clear(itemstoloadout)
+    for _,tycoons in pairs(game.Workspace.Tycoons:GetChildren()) do
+        for _,v in pairs(game.Workspace.Tycoons[tycoons.Name]:GetChildren()) do
+            if v.ClassName == "Model" then
+                if v.Model:FindFirstChild("Upgrade") then
+                    if not (table.find(teslatableout,v.Name) and table.find(itemstoloadout,v.Name) and table.find(upgradersthatblowupores,v.Name)) then
+                        table.insert(itemstoloadout,v.Name)
+                    end
+                end
+            end
+        end
+    end
+    OrionLib:MakeNotification({
+        Name = "Items:",
+        Content = table.concat(itemstoloadout,"\n"),
+        Image = "rbxassetid://4483345998",
+        Time = 5
+    })
+    print(table.concat(itemstoloadout,", "))
+
+end
+
+
+
+
+local oredebounce = false
+game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
+    if shouldboost then
+        if not oredebounce then
+            oredebounce = true
+            spawn(function()
+                --actually boosting :)
+                child.Anchored = true
+                -- for _,v in pairs(itemstoload) do
+                --     mytycoon:WaitForChild(v)
+                --     mytycoon[v].Model:WaitForChild("Upgrade")
+                -- end
+                local furnace
+                for _, v in pairs(mytycoon:GetChildren()) do
+                    if v.ClassName == "Model" then
+                        if v.Model:FindFirstChild("Lava") then
+                            furnace = v.Model.Lava
+                        end
+                    end
+                end
+
+                if shouldboost then
+                    for _,tesla in pairs(teslatable) do
+                        for _,upgrader in pairs(itemstoload) do
+                                spawn(function()
+                                    mytycoon:WaitForChild(upgrader)
+                                    mytycoon[upgrader].Model:WaitForChild("Upgrade")
+                                
+                                    firetouchinterest(child,mytycoon[upgrader].Model.Upgrade,0)
+                                    wait()
+                                    firetouchinterest(child,mytycoon[upgrader].Model.Upgrade,1)
+                                end)
+                        end
+                        wait(0.15)
+                        if tesla ~= "go ahead do it again" then
+                                mytycoon:WaitForChild(tesla)
+                                firetouchinterest(child,mytycoon[tesla].Model.Upgrade,0)
+                                wait()
+                                firetouchinterest(child,mytycoon[tesla].Model.Upgrade,1)
+                            wait(0.15)
+                        end
+                    end
+                    firetouchinterest(child,furnace,0)
+                    firetouchinterest(child,furnace,1)
+                else
+                    child.Anchored = false
+                end
+                oredebounce = false
+            end)
+            oredebounce = false
+        end
+
+
+
+
+        --this is poop and just open boxes yourself and use exotics its more than enough
+    elseif shouldboostout then
+        if not oredebounce then
+            oredebounce = true
+            spawn(function()
+                child.Anchored = true
+                local furnace
+                for _, v in pairs(mytycoon:GetChildren()) do
+                    if v.ClassName == "Model" then
+                        if v.Model:FindFirstChild("Lava") then
+                            furnace = v.Model.Lava
+                        end
+                    end
+                end
+                if shouldboostout then
+                    for _,tesla in pairs(teslatableout) do
+                        for _,upgrader in pairs(itemstoloadout) do
+                            spawn(function()
+                                local theupgrader
+                                for _,v in pairs(game.Workspace.Tycoons:GetChildren()) do
+                                    if v:FindFirstChild(upgrader) then
+                                        theupgrader = v[upgrader].Model.Upgrade
+                                    end
+                                end
+                                firetouchinterest(child,theupgrader,0)
+                                wait()
+                                firetouchinterest(child,theupgrader,1)
+                            end)
+                        end
+                        wait(0.15)
+                        if tesla ~= "go ahead do it again" then
+                            local theupgrader
+                            for _,v in pairs(game.Workspace.Tycoons:GetChildren()) do
+                                if v:FindFirstChild(tesla) then
+                                    theupgrader = v[tesla].Model.Upgrade
+                                end
+                            end
+                            firetouchinterest(child,theupgrader,0)
+                            wait()
+                            firetouchinterest(child,theupgrader,1)
+                            wait(0.15)
+                        end
+                    end
+                    firetouchinterest(child,furnace,0)
+                    firetouchinterest(child,furnace,1)
+                else
+                    child.Anchored = false
+                end
+                oredebounce = false
+            end)
+            oredebounce = false
+        end
+    end
+end)
+
+
+
+function testnumber2(x) -- because i can tbe bothered to change the otehr one
+    x = 20/x
+end
+
+
+Section1e:AddTextbox({
+	Name = "Conveyor Speed Multiplier",
+	Default = 1,
+	TextDisappear = false,
+	Callback = function(Value)
+        if pcall(testnumber2,Value) then
+            shouldchangeconvspeed = true
+            conveyormulti = Value
+            conveyorspeedboost()
+        else
+            OrionLib:MakeNotification({
+                Name = "Seek Help",
+                Content = "A multiplier is a number",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+	end
+})
+
+
+function conveyorspeedboost()
+    if shouldchangeconvspeed then
+        for _,item in pairs(mytycoon:GetChildren()) do
+            if item.ClassName == "Model" then
+                if item.Model:FindFirstChild("Conv") then
+                    local conveyor = item.Model.Conv
+                    local conveyorspeed = tostring(item.Model.Conv.ConveyorSpeed.Value)
+                    conveyor.Velocity = conveyor.CFrame.lookVector*(conveyormulti*conveyorspeed)
+                end
+            end
+        end
+    end
+end
+
+
+
+mytycoon.ChildAdded:Connect(function(item)
+    if conveyormulti ~= 1 then
+        wait(0.1)
+        if item.ClassName == "Model" then
+            if item.Model:FindFirstChild("Conv") then
+                local conveyor = item.Model.Conv
+                local conveyorspeed = tostring(item.Model.Conv.ConveyorSpeed.Value)
+                conveyor.Velocity = conveyor.CFrame.lookVector*(conveyormulti*conveyorspeed)
+            end
+        end
+    end
+end)
+
+pcall(function()
+    game.Players.LocalPlayer.PlayerGui.GUI.Notifications.Template:Destroy()
+end)
+
+spawn(function() -- yea i dont care
+    while wait(0.2) do
+        if loadlayouts then
+            game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout1")
+        elseif loadlayouts1 then
+            game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout2")
+        end
+    end
+end)
+
+
+spawn(function()
+    while true do 
+        game.ReplicatedStorage.RemoteDrop:FireServer()
+        wait(0.2)
+    end
+end)
+
+
+
+local Section2e = Tab5:AddSection({
+	Name = "Power Farm"
+})
+
+
+local powerfarmfurnace = "yes"
+Section2e:AddTextbox({
+	Name = "Auto Power Furnace:",
+	Default = "yes",
+	TextDisappear = false,
+	Callback = function(Value)
+		powerfarmfurnace = Value
+        if game.Workspace.Tycoons[mytycoon.name]:FindFirstChild(powerfarmfurnace) then
+            OrionLib:MakeNotification({
+                Name = "Furnace Farm: ",
+                Content = powerfarmfurnace,
+                Image = "rbxassetid://4483345998",
+                Time = 10
+            })
+        else
+            OrionLib:MakeNotification({
+                Name = "Aint Exist my guy",
+                Content = "(real)",
+                Image = "rbxassetid://4483345998",
+                Time = 10
+            })
+        end
+	end
+})
+
+local powerfurfarm = false
+Section2e:AddToggle({
+	Name = "Auto Farm Furnace",
+	Default = false,
+	Callback = function(Value)
+		powerfurfarm = Value
+	end
+})
+
+
+
+game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
+    if powerfurfarm then
+        child.CFrame = game.Workspace.Tycoons[mytycoon.name][powerfarmfurnace].Model.Lava.CFrame
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+
+print("Loaded")
