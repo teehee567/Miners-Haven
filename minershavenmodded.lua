@@ -41,6 +41,11 @@ local Tab2 = Window:MakeTab({
 	PremiumOnly = false
 })
 
+local Tab3 = Window:MakeTab({
+	Name = "Ore Booster",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
 local Tab4 = Window:MakeTab({
 	Name = "Shops",
 	Icon = "rbxassetid://4483345998",
@@ -62,6 +67,10 @@ local Section1a = Tab1:AddSection({
 
 local Section1b = Tab2:AddSection({
 	Name = "Auto Craft"
+})
+
+local Section1c = Tab3:AddSection({
+	Name = "Ore Booster"
 })
 
 
@@ -273,6 +282,39 @@ end
 
 
 
+
+Section1c:AddParagraph("How to","Place layout and then turn on the booster, it will auto grab the teslas and should be fine. If it doesnt work turn it off and on\n\nFor those who are completely clueless, place down as many upgraders as you want then a single mine and a single furnace.")
+
+local itemstoload = {}
+Section1c:AddToggle({
+	Name = "Boost to the Moon",
+	Default = false,
+	Callback = function(Value)
+		shouldboost = Value
+        if shouldboost then
+            grabminefurnace()
+            grabteslas()
+            --print(table.concat(teslatable,", "))
+            grabitems()
+        end
+    end
+})
+
+
+Section1c:AddParagraph("ONLY 1 BOOSTER CAN BE USED AT A TIME","THIS IS SHIT, If you're wondering yes this also uses your own upgraders\nWill probably get patched soon since its literally 2 lines to patch")
+Section1c:AddToggle({
+	Name = "Boost with Other peoples items",
+	Default = false,
+	Callback = function(Value)
+		shouldboostout = Value
+        if shouldboostout then
+            grabminefurnace()
+            graboutteslas()
+            --print(table.concat(teslatable,", "))
+            graboutitems()
+        end
+    end
+})
 
 function grabitems()
     table.clear(itemstoload)
@@ -928,6 +970,101 @@ function autochecker(pogitem,pogyes)
     end
     itembuyer(pogitem,pogyes)
 end
+
+
+
+local Section2e = Tab5:AddSection({
+	Name = "Power Farm"
+})
+
+
+local powerfarmfurnace = "yes"
+Section2e:AddTextbox({
+	Name = "Auto Power Furnace:",
+	Default = "yes",
+	TextDisappear = false,
+	Callback = function(Value)
+		powerfarmfurnace = Value
+        if game.Workspace.Tycoons[mytycoon.name]:FindFirstChild(powerfarmfurnace) then
+            OrionLib:MakeNotification({
+                Name = "Furnace Farm: ",
+                Content = powerfarmfurnace,
+                Image = "rbxassetid://4483345998",
+                Time = 10
+            })
+        else
+            OrionLib:MakeNotification({
+                Name = "Aint Exist my guy",
+                Content = "(real)",
+                Image = "rbxassetid://4483345998",
+                Time = 10
+            })
+        end
+	end
+})
+
+local powerfurfarm = false
+Section2e:AddToggle({
+	Name = "Auto Farm Furnace",
+	Default = false,
+	Callback = function(Value)
+		powerfurfarm = Value
+	end
+})
+
+
+
+game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
+    if powerfurfarm then
+        child.CFrame = game.Workspace.Tycoons[mytycoon.name][powerfarmfurnace].Model.Lava.CFrame
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
