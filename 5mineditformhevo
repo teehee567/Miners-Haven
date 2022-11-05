@@ -166,16 +166,12 @@ end
 game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
     if autorebirth then
         if pcall(testnumber) then
-            local ttd = game.Players.LocalPlayer.PlayerGui.GUI.HUDTop.Money.Value.text
-            local _, chars = ttd:gsub("e","")
-            if chars == 1 then
-                local p="(.+)e(.+)"
-                local before
-                before,after=ttd:match(p)
-                after = tonumber(after)
-                if after >= tonumber(moneytorebirth) then
-                    game.ReplicatedStorage.Rebirth:InvokeServer()
-                end
+            ttd = game.Players.LocalPlayer.PlayerGui.GUI.Money.Value
+            exponent,_ = ttd:match("(.+),(.+)")
+            exponent = exponent:gsub("%[","")
+            exponent = tonumber(exponent)
+            if exponent >= tonumber(moneytorebirth) then
+                game.ReplicatedStorage.Rebirth:InvokeServer()
             end
         else
             game.ReplicatedStorage.Rebirth:InvokeServer()
