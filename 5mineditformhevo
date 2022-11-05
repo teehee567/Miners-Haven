@@ -682,6 +682,8 @@ local function tiergrabber() --not my code btw its from the game itself :)
             table.insert(enchantitems, v16.Name);
         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 104 then
             table.insert(enchantitems, v16.Name);
+        elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 105 then
+            table.insert(enchantitems, v16.Name);
 
         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 32 then
             table.insert(evolutionitems, v16.Name);
@@ -698,9 +700,6 @@ local function tiergrabber() --not my code btw its from the game itself :)
 end
 tiergrabber()
 
-print(table.concat(rebornitems,", "))
-
-print(table.concat(evolutionitems,", "))
 local function tierfinder(yes)
     if table.find(enchantitems, yes) then
         return "Enchant"
