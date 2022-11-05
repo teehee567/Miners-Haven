@@ -192,7 +192,7 @@ Section1a:AddToggle({
 	Callback = function(Value)
 		autorebirth = Value
         if Value then
-            game.ReplicatedStorage.Reb_irth:InvokeServer()
+            game.ReplicatedStorage.Rebirth:InvokeServer()
         end
 	end
 })
@@ -562,13 +562,32 @@ pcall(function()
     game.Players.LocalPlayer.PlayerGui.GUI.Notifications.Template:Destroy()
 end)
 
-spawn(function() -- yea i dont care
-    while wait(0.2) do
+local debounce = false
+game.Players.LocalPlayer.Rebirths.Changed:Connect(function()
+    if not debounce then
+        debounce = true
         if loadlayouts then
-            game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout1")
-        elseif loadlayouts1 then
-            game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout2")
+            local loaded = false
+            while loaded ~= true do
+                if #mytycoon:GetChildren() <= 4 then
+                    game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout1")
+                elseif #mytycoon:GetChildren() > 4 then
+                    loaded = true
+                end
+                wait()
+            end
+        elseif loadlayouts1 == true then
+            local loaded = false
+            while loaded ~= true do
+                if #mytycoon:GetChildren() <= 4 then
+                    game.ReplicatedStorage.Layouts:InvokeServer("Load", "Layout2")
+                elseif #mytycoon:GetChildren() > 4 then
+                    loaded = true
+                end
+                wait()
+            end
         end
+        debounce = false
     end
 end)
 
@@ -640,9 +659,336 @@ end)
 
 
 
+-- local enchantitems = {}; --Enchant
+-- local forbiddenitems = {}; --Forbidden
+-- local etherealitems = {}; --Ethereal
+-- local paradoxalitems = {}; --Paradocial
+-- local fableditems = {}; --Fabled
+-- local evolutionitems = {}; --Evolutions
+-- local fusionitems = {}; --Fusions
+-- local celestialitems = {}; --Celestial
+-- local transcendentitems = {}; --Transcendent
+-- local rebornitems = {}; -- Reborn
+-- local universalitems = {}; -- Universal
+-- local omnipotentitems = {}; -- omnipotent
+-- local intergalacticitems = {}; -- Intergalactic
+-- local overclockitems = {}; -- overclock
+
+-- local function tiergrabber() --not my code btw its from the game itself :)
+--     for v15, v16 in pairs(game.ReplicatedStorage.Items:GetChildren()) do
+--         print(v16.Name)
+--         if v16:FindFirstChild("Tier") and v16.Tier.Value == 100 then
+--             table.insert(enchantitems, v16.Name);
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 101 then
+--             table.insert(enchantitems, v16.Name);
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 102 then
+--             table.insert(enchantitems, v16.Name);
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 103 then
+--             table.insert(enchantitems, v16.Name);
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 104 then
+--             table.insert(enchantitems, v16.Name);
+
+
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 33 then
+--             table.insert(evolutionitems, v16.Name);
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 31 then
+--             table.insert(fusionitems, v16.Name);
+--         elseif v16:FindFirstChild("RebornChance") then
+--             table.insert(rebornitems, v16.Name);
+--         elseif v16:FindFirstChild("Tier") and v16.Tier.Value == 30 then
+--             table.insert(rebornitems, v16.Name);
+--         end;
+--     end;
+-- end
+-- tiergrabber()
+
+
+-- local function tierfinder(yes)
+--     if table.find(enchantitems, yes) then
+--         return "Enchant"
+--     elseif table.find(forbiddenitems, yes) then
+--         return "Forbidden"
+--     elseif table.find(etherealitems, yes) then
+--         return "Ethereal"
+--     elseif table.find(paradoxalitems, yes) then
+--         return "Paradoxal"
+--     elseif table.find(fableditems, yes) then
+--         return "Fabled"
+--     elseif table.find(evolutionitems, yes) then
+--         return "Evolutions"
+--     elseif table.find(fusionitems, yes) then
+--         return "Fusions"
+--     elseif table.find(celestialitems, yes) then
+--         return "Celestial"
+--     elseif table.find(transcendentitems, yes) then
+--         return "Transcendent"
+--     elseif table.find(universalitems, yes) then
+--         return "Universal"
+--     elseif table.find(omnipotentitems, yes) then
+--         return "Omnipotent"
+--     elseif table.find(intergalacticitems, yes) then
+--         return "Intergalactic"
+--     elseif table.find(overclockitems, yes) then
+--         return "Overclock"
+
+--     elseif table.find(rebornitems, yes) then
+--         return "Reborn"
+--     else
+--         return "Other"
+--     end
+-- end
+
+-- local function itemfinder(id)
+--     for _,v in pairs(game.ReplicatedStorage.Items:GetChildren()) do
+--         if v.ItemId.Value == id then
+--             return v.Name
+--         end
+--     end
+-- end
+
+-- local function navtoitemtab(item)
+--     local tier
+--     for _,v in pairs(game.ReplicatedStorage.Items:GetChildren()) do
+--         if v.Name == item then
+--             tier = tierfinder(itemfinder(v.ItemId.Value))
+--             tier = tostring(tier)
+--             if tier ~= "Universal" and tier ~= "Omnipotent" and tier ~= "Intergalactic" and tier ~= "Overclock" then
+--                 firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman.Contents.Buttons[tier].MouseButton1Click)
+--             else
+--                 firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman2.Contents.Buttons[tier].MouseButton1Click)
+--             end
+--         end
+--     end
+--     if tier ~= "Universal" and tier ~= "Omnipotent" and tier ~= "Intergalactic" and tier ~= "Overclock" then
+--         firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman.Contents.Items[item].MouseButton1Click)
+--     else
+--         firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman2.Contents.Items[item].MouseButton1Click)
+--     end
+-- end
+
+-- function autocrafter(pogitem,pogyes)
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.HUDLeft.Buttons.Inventory.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Frame.Bottom.Search.Cancel.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Close.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.HUDLeft.Buttons.Inventory.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Close.MouseButton1Click)
+--     wait(0.5)
+--     if tierfinder(pogitem) == "Reborn" or tierfinder(pogitem) == "Other" then
+--         OrionLib:MakeNotification({
+--             Name = "WAKE UP (real)",
+--             Content = "my guy, did you seriously just try to craft: ".. pogitem,
+--             Image = "rbxassetid://4483345998",
+--             Time = 10
+--         })
+--         return
+--     end
+--     local function itembuyer(yesitem,yesamount)
+--         local aggup = {}
+--         local aggnum = {}
+--         local function yes(item, amount)
+--             if tierfinder(item) ~= "Reborn" and tierfinder(item) ~= "Other" then
+--                 navtoitemtab(item)
+--                 local upgraders = {}
+--                 local amountinrecepie = {}
+--                 local tier = tierfinder(item)
+--                 for _,v in pairs(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman.Contents.Crafting.Cost:GetChildren()) do
+--                     if v.Name == "SampleItem" then
+--                         v:WaitForChild("ItemId")
+--                         local amounttomake = v.Amount.Text
+--                         amounttomake = amounttomake:gsub("x","")
+--                         amounttomake = tonumber(amounttomake)
+--                         table.insert(amountinrecepie,amounttomake*amount)
+--                         table.insert(upgraders,itemfinder(v.ItemId.Value))
+--                     end
+--                 end
+--                 --print("---Materials: "..table.concat(upgraders, ", "))
+--                 --print("---Amount: "..table.concat(amountinrecepie, ", "))
+--                 for i,upgrader in pairs(upgraders) do
+--                     yes(upgrader,amountinrecepie[i])
+--                     navtoitemtab(item)
+--                 end
+--                 --print("Sending Server: "..item.." Amount: "..amount)
+--                 game.ReplicatedStorage.BuyItem:InvokeServer(item,amount,amount)
+--             else
+--                 if table.find(aggup, item) then
+--                     for i,upgrader in pairs(aggup) do
+--                         if upgrader == item then
+--                             aggnum[i] = aggnum[i]+amount
+--                         end
+--                     end
+--                 else
+--                     table.insert(aggup, item)
+--                     table.insert(aggnum, amount)
+--                 end
+--             end
+--         end
+--         yes(yesitem,yesamount)
+
+
+--         local finaltable = {}
+--         for i,v in pairs(aggup) do
+--             local string = v..":  "..aggnum[i]
+--             table.insert(finaltable,string)
+--         end
+--         OrionLib:MakeNotification({
+--             Name = "Auto Crafter:",
+--             Content = "You made :"..yesitem,
+--             Image = "rbxassetid://4483345998",
+--             Time = 5
+--         })
+--         OrionLib:MakeNotification({
+--             Name = "RAW Auto Crafter Materials:",
+--             Content = table.concat(finaltable,"\n"),
+--             Image = "rbxassetid://4483345998",
+--             Time = 5
+--         })
+--     end
+--     itembuyer(pogitem,pogyes)
+-- end
 
 
 
+
+
+-- function autochecker(pogitem,pogyes)
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.HUDLeft.Buttons.Inventory.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Frame.Bottom.Search.Cancel.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Close.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.HUDLeft.Buttons.Inventory.MouseButton1Click)
+--     wait()
+--     firesignal(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Close.MouseButton1Click)
+--     wait(0.5)
+--     if tierfinder(pogitem) == "Reborn" or tierfinder(pogitem) == "Other" then
+--         OrionLib:MakeNotification({
+--             Name = "WAKE UP (real)",
+--             Content = "my guy, did you seriously just try to craft: ".. pogitem,
+--             Image = "rbxassetid://4483345998",
+--             Time = 10
+--         })
+--         return
+--     end
+--     local function itembuyer(yesitem,yesamount)
+--         local aggup = {}
+--         local aggnum = {}
+--         local function yes(item, amount,incursion)
+--             if tierfinder(item) ~= "Reborn" and tierfinder(item) ~= "Other" then
+--                 local incursions = incursion + 1
+--                 navtoitemtab(item)
+--                 local upgraders = {}
+--                 local amountinrecepie = {}
+--                 local tier = tierfinder(item)
+--                 if tier ~= "Universal" and tier ~= "Omnipotent" and tier ~= "Intergalactic" and tier ~= "Overclock" then
+--                     for _,v in pairs(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman.Contents.Crafting.Cost:GetChildren()) do
+--                         if v.Name == "SampleItem" then
+--                             v:WaitForChild("ItemId")
+--                             local amounttomake = v.Amount.Text
+--                             amounttomake = amounttomake:gsub("x","")
+--                             amounttomake = tonumber(amounttomake)
+--                             table.insert(amountinrecepie,amounttomake*amount)
+--                             table.insert(upgraders,itemfinder(v.ItemId.Value))
+--                         end
+--                     end
+--                 else
+--                     for _,v in pairs(game.Players.LocalPlayer.PlayerGui.GUI.Craftsman2.Contents.Crafting.Cost:GetChildren()) do
+--                         if v.Name == "SampleItem" then
+--                             v:WaitForChild("ItemId")
+--                             local amounttomake = v.Amount.Text
+--                             amounttomake = amounttomake:gsub("x","")
+--                             amounttomake = tonumber(amounttomake)
+--                             table.insert(amountinrecepie,amounttomake*amount)
+--                             table.insert(upgraders,itemfinder(v.ItemId.Value))
+--                         end
+--                     end
+--                 end
+--                 --print("---Materials: "..table.concat(upgraders, ", "))
+--                 --print("---Amount: "..table.concat(amountinrecepie, ", "))
+--                 for i,upgrader in pairs(upgraders) do
+--                     yes(upgrader,amountinrecepie[i],incursions)
+--                     navtoitemtab(item)
+--                 end
+--             --print("creating: "..item.." Amount: "..amount.." --incursions: "..incursion)
+--             else
+--                 if table.find(aggup, item) then
+--                     for i,upgrader in pairs(aggup) do
+--                         if upgrader == item then
+--                             aggnum[i] = aggnum[i]+ amount
+--                         end
+--                     end
+--                 else
+--                     table.insert(aggup, item)
+--                     table.insert(aggnum, amount)
+--                 end
+--             end
+--         end
+--         yes(yesitem,yesamount,0)
+--         print("---Materials: "..table.concat(aggup, ", "))
+--         print("---Amount: "..table.concat(aggnum, ", "))
+
+--         local endaggnum = {}
+--         for int,v in pairs(aggup) do
+--             local done = false
+--             for _,vs in pairs(game.Players.LocalPlayer.PlayerGui.GUI.Inventory.Frame.Items:GetChildren()) do
+--                 if vs.ClassName == "ImageButton" then
+--                     if itemfinder(vs.ItemId.Value) == v then
+--                         local amount = vs.Amount.Text
+--                         amount = amount:gsub("x","")
+--                         amount = tonumber(amount)
+--                         amount = amount-aggnum[int]
+--                         print(v.." "..amount.." "..aggnum[int])
+--                         table.insert(endaggnum,amount)
+--                         done = true
+--                         break
+--                     end
+--                 end
+--             end
+--             if not done then
+--                 print(v.." "..tostring(-aggnum[int]).." "..aggnum[int])
+--                 table.insert(endaggnum,-aggnum[int])
+--             end
+--         end
+
+
+--         local cannotcraft = {}
+--         for i,v in pairs(aggup) do
+--             --print(v.."   "..endaggnum[i])
+--             if endaggnum[i] then
+--                 if endaggnum[i] < 0 then
+--                     endaggnum[i] = tostring(endaggnum[i])
+--                     endaggnum[i] = endaggnum[i]:gsub("-","")
+--                     table.insert(cannotcraft,v.." missing: "..endaggnum[i])
+--                 end
+--             end
+--         end
+
+--         local content = ""
+--         if not next(cannotcraft) then
+--             content = "You can craft"
+--             OrionLib:MakeNotification({
+--                 Name = "So True, FR: "..yesitem,
+--                 Content = content,
+--                 Image = "rbxassetid://4483345998",
+--                 Time = 10
+--             })
+--         elseif next(cannotcraft) then
+--             content = table.concat(cannotcraft,"\n")
+--             print(content)
+--             OrionLib:MakeNotification({
+--                 Name = "L Cant Craft: "..yesitem,
+--                 Content = content,
+--                 Image = "rbxassetid://4483345998",
+--                 Time = 10
+--             })
+--         end
+--     end
+--     itembuyer(pogitem,pogyes)
+-- end
 
 
 
