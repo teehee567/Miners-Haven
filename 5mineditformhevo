@@ -234,7 +234,7 @@ Section1a:AddToggle({
 
 local teslatable = {}
 
-local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All"}
+local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All", "Prismatic Genesis"}
 -- if you're looking throuhg the code because they're more teslas, just add to this table^
 
 function grabteslas()
