@@ -396,7 +396,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     if shouldboost then
         if not oredebounce then
             oredebounce = true
-            spawn(function()
+            pcall(function()
                 --actually boosting :)
                 child.Anchored = true
                 -- for _,v in pairs(itemstoload) do
@@ -415,7 +415,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                 if shouldboost then
                     for _,tesla in pairs(teslatable) do
                         for _,upgrader in pairs(itemstoload) do
-                                spawn(function()
+                                pcall(function()
                                     mytycoon:WaitForChild(upgrader)
                                     mytycoon[upgrader].Model:WaitForChild("Upgrade")
                                 
@@ -450,7 +450,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
     elseif shouldboostout then
         if not oredebounce then
             oredebounce = true
-            spawn(function()
+            pcall(function()
                 child.Anchored = true
                 local furnace
                 for _, v in pairs(mytycoon:GetChildren()) do
@@ -463,7 +463,7 @@ game.Workspace.DroppedParts[mytycoon.name].ChildAdded:Connect(function(child)
                 if shouldboostout then
                     for _,tesla in pairs(teslatableout) do
                         for _,upgrader in pairs(itemstoloadout) do
-                            spawn(function()
+                            pcall(function()
                                 local theupgrader
                                 for _,v in pairs(game.Workspace.Tycoons:GetChildren()) do
                                     if v:FindFirstChild(upgrader) then
