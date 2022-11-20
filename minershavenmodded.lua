@@ -174,11 +174,12 @@ game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
                 before,after=ttd:match(p)
                 after = tonumber(after)
                 if after >= tonumber(moneytorebirth) then
-                    game.ReplicatedStorage.Reb_irth:InvokeServer()
+			
+                    game.ReplicatedStorage.Reb_irth:InvokeServer(game.Players.LocalPlayer.Reb.Value)
                 end
             end
         else
-            game.ReplicatedStorage.Reb_irth:InvokeServer()
+            game.ReplicatedStorage.Reb_irth:InvokeServer(game.Players.LocalPlayer.Reb.Value)
         end
     end
 end)
