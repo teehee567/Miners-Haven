@@ -193,7 +193,7 @@ Section1a:AddToggle({
 	Callback = function(Value)
 		autorebirth = Value
         if Value then
-            game.ReplicatedStorage.Reb_irth:InvokeServer()
+            game.ReplicatedStorage.Reb_irth:InvokeServer(game.Players.LocalPlayer.Reb.Value)
         end
 	end
 })
