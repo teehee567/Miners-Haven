@@ -163,6 +163,21 @@ for _, tycoon in ipairs(game.Workspace.Tycoons:GetChildren()) do
     end
 end
 
+
+
+local rebirthfunc
+for _,v in pairs(getgc(true)) do
+    if type(v) == 'function' and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerGui.GUI.Settings.Contents.Settings then
+        for _,v1 in pairs(getconstants(v)) do -- no clue why table.find doesnt work
+            if v1 == "Reb_irth" then
+                rebirthfunc = v
+            end
+        end
+    end
+end
+
+
+
 game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
     if autorebirth then
         if pcall(testnumber) then
@@ -175,11 +190,11 @@ game.Players.LocalPlayer.PlayerGui.GUI.Money.Changed:Connect(function()
                 after = tonumber(after)
                 if after >= tonumber(moneytorebirth) then
 			
-                    game.ReplicatedStorage.Reb_irth:InvokeServer(game.Players.LocalPlayer.Reb.Value)
+                    rebirthfunc()
                 end
             end
         else
-            game.ReplicatedStorage.Reb_irth:InvokeServer(game.Players.LocalPlayer.Reb.Value)
+            rebirthfunc()
         end
     end
 end)
@@ -193,7 +208,7 @@ Section1a:AddToggle({
 	Callback = function(Value)
 		autorebirth = Value
 		if Value then
-		    game.ReplicatedStorage.Reb_irth:InvokeServer(game.Players.LocalPlayer.Reb.Value)
+		    rebirthfunc()
 		end
 	end
 })
