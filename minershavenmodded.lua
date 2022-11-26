@@ -169,7 +169,8 @@ local rebirthfunc
 for _,v in pairs(getgc(true)) do
     if type(v) == 'function' and getfenv(v).script == game:GetService("Players").LocalPlayer.PlayerGui.GUI.Settings.Contents.Settings then
         for _,v1 in pairs(getconstants(v)) do -- no clue why table.find doesnt work
-            if v1 == "Reb_irth" then
+            if v1 == "Reb" then
+		print("hooked:",v)
                 rebirthfunc = v
             end
         end
